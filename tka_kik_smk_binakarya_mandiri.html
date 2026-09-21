@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TKA KIK Kelas XII - SMK BINAKARYA MANDIRI</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#1d4ed8',
+                            600: '#1e40af',
+                            700: '#1d3557',
+                            800: '#0f172a'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar and print styles */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white; color: black; }
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-blue-500 selection:text-white">
+
+    <!-- Top Header Bar -->
+    <header class="bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 text-white shadow-md sticky top-0 z-30 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-lg bg-white/10 backdrop-blur border border-white/20 flex items-center justify-center text-xl font-bold text-yellow-400 shadow-inner">
+                    <i class="fa-solid font-black">BM</i>
+                </div>
+                <div>
+                    <h1 class="text-base sm:text-lg font-bold tracking-tight leading-tight">SMK BINAKARYA MANDIRI</h1>
+                    <p class="text-xs text-blue-200 font-medium">Pendalaman Materi TKA Nasional - KIK Kelas XII</p>
+                </div>
+            </div>
+
+            <!-- Header Info & Timer Badge -->
+            <div id="header-exam-status" class="hidden flex items-center space-x-3 sm:space-x-6">
+                <div class="hidden md:block text-right">
+                    <p id="header-student-name" class="text-sm font-semibold text-white max-w-[150px] truncate"></p>
+                    <p id="header-student-class" class="text-xs text-blue-200"></p>
+                </div>
+                <div class="bg-red-500/20 border border-red-400/40 backdrop-blur rounded-xl px-3 sm:px-4 py-1.5 flex items-center space-x-2">
+                    <i class="fa-regular fa-clock text-red-300 animate-pulse"></i>
+                    <div>
+                        <span class="text-[10px] uppercase tracking-wider text-red-200 block font-semibold leading-none">Sisa Waktu</span>
+                        <span id="timer-display" class="font-mono text-base sm:text-lg font-bold text-white tracking-wider">60:00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col">
+
+        <!-- SCREEN 1: REGISTRATION FORM -->
+        <div id="screen-register" class="max-w-2xl mx-auto w-full my-auto bg-white rounded-2xl shadow-xl border border-slate-200/80 overflow-hidden">
+            <div class="bg-gradient-to-r from-blue-700 to-indigo-800 p-6 sm:p-8 text-white text-center relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl font-black">TKA</div>
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/10 backdrop-blur mb-3 border border-white/20">
+                    <i class="fa-solid fa-graduation-cap text-3xl text-yellow-300"></i>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">PORTAL UJIAN ONLINE</h2>
+                <p class="text-blue-100 text-sm mt-1 font-medium">Pendalaman Materi Tes Kemampuan Akademik (TKA) KIK Kelas XII</p>
+            </div>
+
+            <form id="form-register" onsubmit="handleStartExam(event)" class="p-6 sm:p-8 space-y-6">
+                <!-- Info Rules Alert -->
+                <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg text-xs sm:text-sm text-amber-900 space-y-1.5">
+                    <p class="font-bold flex items-center gap-1.5 text-amber-800">
+                        <i class="fa-solid fa-triangle-exclamation"></i> PETUNJUK & ATURAN PENTING:
+                    </p>
+                    <ul class="list-disc list-inside space-y-1 text-amber-900/90 pl-1">
+                        <li>Jumlah Soal: <b>50 Soal HOTS Pilihan Ganda</b> (Nilai Maksimal 100).</li>
+                        <li>Waktu Pengerjaan: <b>60 Menit</b> (Timer otomatis submit saat habis).</li>
+                        <li><b>SISTEM ANTI-CURANG:</b> Jika membuka tab/aplikasi lain, ujian akan <u>otomatis reset ke Soal No. 1</u> dan jawaban sebelumnya akan hilang (Timer tetap berjalan!).</li>
+                        <li>Soal dan pilihan jawaban diacak untuk tiap peserta.</li>
+                    </ul>
+                </div>
+
+                <!-- Input Student Name -->
+                <div>
+                    <label for="student-name" class="block text-sm font-semibold text-slate-700 mb-2">Nama Lengkap Siswa <span class="text-red-500">*</span></label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-user"></i>
+                        </span>
+                        <input type="text" id="student-name" required placeholder="Masukkan nama lengkap Anda..." class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition text-slate-800 font-medium placeholder:text-slate-400">
+                    </div>
+                </div>
+
+                <!-- Input Class Selection -->
+                <div>
+                    <label for="student-class" class="block text-sm font-semibold text-slate-700 mb-2">Kelas & Jurusan <span class="text-red-500">*</span></label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-school"></i>
+                        </span>
+                        <select id="student-class" required class="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition text-slate-800 font-medium bg-white appearance-none cursor-pointer">
+                            <option value="" disabled selected>-- Pilih Kelas Anda --</option>
+                            <!-- Dynamically filled with DKV 1-4, TKJ 1-13, TKR 1-11, TSM 1-13, TITL 1-4, TAV 1, TPM 1-3, TAB 1-9 -->
+                        </select>
+                        <span class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-blue-500/25 transition transform active:scale-[0.99] flex items-center justify-center space-x-2 text-base">
+                    <span>MULAI PENGERJAAN SOAL</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- SCREEN 2: EXAM WORKSPACE -->
+        <div id="screen-exam" class="hidden flex-grow flex flex-col lg:flex-row gap-6">
+            
+            <!-- Left Panel: Main Question Area -->
+            <div class="flex-1 flex flex-col bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
+                <!-- Question Header Bar -->
+                <div class="bg-slate-50 border-b border-slate-200 px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <span id="current-question-badge" class="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full">Soal #1</span>
+                        <span id="current-question-category" class="text-xs font-semibold text-slate-500 tracking-wide uppercase">Domain Materi</span>
+                    </div>
+                    <label class="inline-flex items-center space-x-2 cursor-pointer bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200 hover:bg-amber-100 transition">
+                        <input type="checkbox" id="btn-doubt" onchange="toggleDoubtMark()" class="w-4 h-4 text-amber-600 rounded focus:ring-amber-500">
+                        <span class="text-xs font-bold text-amber-800 flex items-center gap-1">
+                            <i class="fa-solid fa-bookmark"></i> Ragu-Ragu
+                        </span>
+                    </label>
+                </div>
+
+                <!-- Question Text -->
+                <div class="p-6 sm:p-8 flex-grow">
+                    <div id="question-text" class="text-base sm:text-lg font-medium text-slate-800 leading-relaxed mb-6">
+                        <!-- Loaded dynamically -->
+                    </div>
+
+                    <!-- Choices List -->
+                    <div id="choices-container" class="space-y-3">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+
+                <!-- Question Navigation Footer -->
+                <div class="bg-slate-50 border-t border-slate-200 px-6 py-4 flex items-center justify-between flex-wrap gap-3">
+                    <button id="btn-prev" onclick="navigateQuestion(-1)" class="px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 font-semibold text-sm transition flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i> Sebelumnya
+                    </button>
+
+                    <div class="flex items-center gap-3">
+                        <button id="btn-next" onclick="navigateQuestion(1)" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition shadow-md shadow-blue-600/20 flex items-center gap-2">
+                            Selanjutnya <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                        <button id="btn-finish" onclick="confirmSubmitExam()" class="hidden px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm transition shadow-md shadow-emerald-600/20 flex items-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i> Kirim Nilai
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Navigation Grid -->
+            <div class="w-full lg:w-80 bg-white rounded-2xl shadow-md border border-slate-200 p-5 flex flex-col shrink-0">
+                <div class="flex items-center justify-between mb-4 border-b pb-3">
+                    <h3 class="font-bold text-slate-800 text-sm uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-th-large text-blue-600"></i> Navigasi Soal
+                    </h3>
+                    <span id="answered-count-badge" class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full">0/50 Terjawab</span>
+                </div>
+
+                <!-- Grid Buttons -->
+                <div id="question-grid" class="grid grid-cols-5 gap-2 max-h-[380px] overflow-y-auto p-1">
+                    <!-- 1-50 Grid buttons rendered dynamically -->
+                </div>
+
+                <!-- Legend -->
+                <div class="mt-5 pt-4 border-t border-slate-100 space-y-2 text-xs font-medium text-slate-600">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3.5 h-3.5 rounded bg-blue-600 inline-block"></span>
+                        <span>Sedang Dibuka</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-3.5 h-3.5 rounded bg-emerald-500 inline-block"></span>
+                        <span>Sudah Dijawab</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-3.5 h-3.5 rounded bg-amber-400 inline-block"></span>
+                        <span>Ragu-Ragu</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-3.5 h-3.5 rounded bg-slate-100 border border-slate-300 inline-block"></span>
+                        <span>Belum Dijawab</span>
+                    </div>
+                </div>
+
+                <!-- Submit Early Button -->
+                <div class="mt-6">
+                    <button onclick="confirmSubmitExam()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow transition text-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-check-double"></i> SELESAIKAN UJIAN
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 3: RESULT & REVIEW PAGE -->
+        <div id="screen-result" class="hidden space-y-8 max-w-5xl mx-auto w-full">
+            
+            <!-- Result Banner Card -->
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 p-8 text-white text-center relative">
+                    <span class="px-4 py-1.5 bg-yellow-400 text-blue-950 font-extrabold text-xs tracking-wider uppercase rounded-full inline-block mb-3">HASIL EVALUASI TKA</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold">LEMBAR HASIL KEMAMPUAN AKADEMIK</h2>
+                    <p class="text-blue-200 text-sm mt-1">SMK BINAKARYA MANDIRI - MATA PELAJARAN KIK</p>
+
+                    <!-- Big Score Badge -->
+                    <div class="my-6 inline-flex flex-col items-center justify-center w-36 h-36 rounded-full bg-white/10 backdrop-blur border-4 border-yellow-400/80 shadow-2xl">
+                        <span class="text-xs uppercase font-bold text-blue-200 tracking-wider">Skor Akhir</span>
+                        <span id="result-score-display" class="text-5xl font-black text-yellow-300">0</span>
+                        <span class="text-[10px] text-blue-200">dari Maks. 100</span>
+                    </div>
+
+                    <div id="result-grade-badge" class="inline-block px-4 py-1 rounded-lg text-sm font-bold bg-white/20">
+                        Kategori: -
+                    </div>
+                </div>
+
+                <!-- Details Grid -->
+                <div class="p-6 bg-slate-50 border-b grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+                    <div class="p-3 bg-white rounded-xl border border-slate-200 shadow-sm">
+                        <span class="text-xs text-slate-500 block font-medium">Nama Siswa</span>
+                        <span id="res-student-name" class="font-bold text-slate-800 text-sm sm:text-base">-</span>
+                    </div>
+                    <div class="p-3 bg-white rounded-xl border border-slate-200 shadow-sm">
+                        <span class="text-xs text-slate-500 block font-medium">Kelas</span>
+                        <span id="res-student-class" class="font-bold text-slate-800 text-sm sm:text-base">-</span>
+                    </div>
+                    <div class="p-3 bg-white rounded-xl border border-slate-200 shadow-sm">
+                        <span class="text-xs text-slate-500 block font-medium">Jawaban Benar</span>
+                        <span id="res-correct-count" class="font-bold text-emerald-600 text-sm sm:text-base">0 Soal</span>
+                    </div>
+                    <div class="p-3 bg-white rounded-xl border border-slate-200 shadow-sm">
+                        <span class="text-xs text-slate-500 block font-medium">Jawaban Salah</span>
+                        <span id="res-wrong-count" class="font-bold text-red-500 text-sm sm:text-base">0 Soal</span>
+                    </div>
+                </div>
+
+                <!-- Actions Bar -->
+                <div class="p-6 flex flex-wrap items-center justify-between gap-4 bg-white no-print">
+                    <div class="text-xs text-slate-500 italic">
+                        <i class="fa-solid fa-lock text-slate-400"></i> Hasil ujian telah dikunci & disimpan. Jawaban tidak dapat diperbaiki kembali.
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="window.print()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-bold text-sm rounded-xl transition shadow flex items-center gap-2">
+                            <i class="fa-solid fa-print"></i> Cetak / Download Hasil
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pembahasan Header -->
+            <div class="flex items-center justify-between">
+                <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-book-open text-blue-600"></i> Pembahasan Soal Detail (50 Nomor)
+                </h3>
+                <span class="text-xs font-semibold text-slate-500">Analisis HOTS & Kunci Jawaban</span>
+            </div>
+
+            <!-- Pembahasan Cards Container -->
+            <div id="pembahasan-container" class="space-y-4">
+                <!-- 50 Detailed Pembahasan items injected dynamically -->
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL 1: CHEATING WARNING (Tab Switch / App Blur) -->
+    <div id="modal-cheat" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 text-center shadow-2xl border-2 border-red-500 animate-bounce-short">
+            <div class="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="text-xl font-extrabold text-slate-900 mb-2">PERINGATAN KECURANGAN!</h3>
+            <p class="text-sm text-slate-600 leading-relaxed mb-6">
+                Anda terdeteksi **meninggalkan tab/aplikasi ujian**! Sesuai aturan anti-mencontek TKA, posisi soal Anda di-<b>reset ulang ke Nomor 1</b> dan jawaban sebelumnya dihapus. <br><br>
+                <span class="text-red-600 font-bold">Catatan: Timer ujian tetap berjalan tanpa diulang!</span>
+            </p>
+            <button onclick="closeCheatModal()" class="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition text-sm">
+                SAYA MENGERTI & LANJUTKAN
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL 2: CONFIRM SUBMIT -->
+    <div id="modal-submit" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 text-center shadow-xl">
+            <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
+                <i class="fa-solid fa-paper-plane"></i>
+            </div>
+            <h3 class="text-xl font-extrabold text-slate-900 mb-2">Selesaikan Ujian Sekarang?</h3>
+            <p id="submit-modal-text" class="text-sm text-slate-600 mb-6">
+                Pastikan Anda telah memeriksa semua jawaban. Setelah dikirim, jawaban tidak dapat diperbaiki lagi.
+            </p>
+            <div class="flex gap-3">
+                <button onclick="closeSubmitModal()" class="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition text-sm">
+                    Batal
+                </button>
+                <button onclick="processFinalSubmit()" class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition text-sm shadow-md">
+                    Ya, Kirim Nilai
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* ==========================================================================
+           1. QUESTION MASTER DATABASE (50 HOTS Questions for KIK XII SMK)
+           Topics:
+           - Karakter Personal & Wirausaha
+           - Design Thinking & Prototype
+           - Analisis SWOT
+           - Penyusunan Laporan Usaha
+           - Pengelolaan Laporan Keuangan Usaha
+           ========================================================================== */
+        const rawQuestionBank = [
+            // KARAKTER PERSONAL & WIRAUSAHA
+            {
+                category: "Karakter Wirausaha",
+                question: "Seorang wirausahawan DKV menghadapi situasi di mana hasil cetak brosur pelanggan mengalami degradasi warna akibat kendala mesin. Sikap mental pantang menyerah dan berorientasi solusi yang paling tepat ditunjukkan dengan...",
+                options: [
+                    "Menyalahkan pemasok mesin dan membatalkan pesanan",
+                    "Mengganti kerugian pelanggan dan memperbaiki profil warna cetak",
+                    "Meminta pelanggan menerima hasil cetak apa adanya",
+                    "Menutup usaha sementara sampai mesin baru dibeli",
+                    "Mengalihkan pesanan ke percetakan lain tanpa konfirmasi"
+                ],
+                answer: 1,
+                pembahasan: "Sikap wirausahawan sejati adalah bertanggung jawab terhadap mutu produk dan kepuasan pelanggan dengan segera melakukan tindakan korektif (memperbaiki teknis warna) serta menjamin kepuasan pelanggan."
+            },
+            {
+                category: "Karakter Wirausaha",
+                question: "Seorang wirausahawan TKJ ingin meluncurkan layanan RT/RW Net di desanya. Karakter komitmen tinggi dan pengambil risiko terukur ditunjukkan melalui...",
+                options: [
+                    "Langsung membeli server termahal tanpa riset pasar",
+                    "Melakukan survei kebutuhan bandwidth dan uji coba jaringan terbatas",
+                    "Meminjam modal sebesar-besarnya tanpa perhitungan ROI",
+                    "Menunggu bantuan perangkat jaringan gratis dari pemerintah",
+                    "Menjual paket internet murah tanpa memperhitungkan operasional"
+                ],
+                answer: 1,
+                pembahasan: "Pengambil risiko terukur (calculated risk taker) selalu diawali dengan riset pasar dan uji coba skala kecil sebelum melakukan investasi skala besar."
+            },
+            {
+                category: "Karakter Wirausaha",
+                question: "Dalam menghadapi iklim bisnis bengkel TKR yang makin kompetitif, seorang pemilik bengkel memilih menerapkan sistem booking servis online. Tindakan ini mencerminkan karakter wirausaha...",
+                options: [
+                    "Inovatif dan tanggap perubahan teknologi",
+                    "Otoriter dan menguasai pasar",
+                    "Konservatif dan mempertahankan tradisi",
+                    "Reaktif hanya saat omset turun",
+                    "Spekulatif dalam mencari keuntungan"
+                ],
+                answer: 0,
+                pembahasan: "Menerapkan sistem booking online adalah wujud inovasi dan adaptabilitas terhadap perkembangan teknologi digital untuk meningkatkan kenyamanan pelanggan."
+            },
+            {
+                category: "Karakter Wirausaha",
+                question: "Teknisi TSM yang ingin membuka usaha bengkel sepeda motor mandiri melakukan evaluasi kegagalan usaha terdahulu. Perilaku ini mencerminkan dimensi Karakter Wirausaha...",
+                options: [
+                    "Inteligensi emosional dan evaluatif diri",
+                    "Keberuntungan finansial",
+                    "Ketergantungan pada modal eksternal",
+                    "Arogansi profesional",
+                    "Orientasi pada hasil instan"
+                ],
+                answer: 0,
+                pembahasan: "Kemampuan merefleksikan kegagalan masa lalu untuk perbaikan masa depan merupakan indikator kematangan emosional dan efikasi diri seorang entrepreneur."
+            },
+            {
+                category: "Karakter Wirausaha",
+                question: "Seorang wirausahawan TITL menemukan bahwa limbah kabel dan komponen listrik menumpuk. Karakter kreativitas dan efisiensi sumber daya ditunjukkan dengan...",
+                options: [
+                    "Membuang limbah ke tempat pembuangan akhir",
+                    "Mendaur ulang limbah menjadi produk kerajinan bernilai jual",
+                    "Membiarkan limbah memenuhi ruang workshop",
+                    "Membakar limbah agar area kerja bersih",
+                    "Menjual rugi seluruh sisa limbah ke pengepul kilat"
+                ],
+                answer: 1,
+                pembahasan: "Kreativitas menciptakan nilai tambah dari material yang dianggap tidak berguna (limbah) menjadi produk inovatif baru bernilai ekonomis."
+            },
+            {
+                category: "Karakter Wirausaha",
+                question: "Wirausahawan TAV membuat perangkat amplifier rakitan. Ketika ada komplain dari pelanggan terkait suara yang berdengung, tindakan berorientasi kualitas adalah...",
+                options: [
+                    "Menolak komplain karena produk dibuat secara manual",
+                    "Menganalisis sistem grounding perangkat dan memberikan garansi perbaikan",
+                    "Pura-pura tidak tahu dan memblokir kontak pelanggan",
+                    "Menyalahkan instalasi listrik rumah konsumen",
+                    "Mengembalikan uang 50% tanpa memperbaiki barang"
+                ],
+                answer: 1,
+                pembahasan: "Bertanggung jawab atas purnajual dan menganalisis akar masalah teknis (sistem grounding) merupakan cerminan komitmen tinggi pada mutu."
+            },
+            {
+                category: "Karakter Wirausaha",
+                question: "Seorang lulusan TPM membuka jasa manufaktur sparepart presisi. Prinsip kerja keras dan berorientasi pada masa depan tecermin saat ia...",
+                options: [
+                    "Menikmati keuntungan usaha untuk konsumsi pribadi",
+                    "Menyisihkan laba usaha untuk investasi mesin CNC modern",
+                    "Menolak menerima pesanan rumit yang membutuhkan ketelitian tinggi",
+                    "Merekrut tenaga kerja tanpa melakukan seleksi kompetensi",
+                    "Menurunkan kualitas bahan demi margin keuntungan tinggi"
+                ],
+                answer: 1,
+                pembahasan: "Reinvestasi laba bersih untuk modernisasi alat (mesin CNC) menunjukkan visi jangka panjang untuk peningkatan daya saing usaha."
+            },
+            {
+                category: "Karakter Wirausaha",
+                question: "Seorang wirausahawan TAB (Teknik Alat Berat) yang jujur dan berintegritas tinggi akan selalu...",
+                options: [
+                    "Menggunakan komponen palsu demi memangkas biaya pemeliharaan",
+                    "Menyampaikan kondisi objektif kelaikan alat berat kepada penyewa",
+                    "Menyembunyikan kerusakan hidrolik saat transaksi sewa",
+                    "Memalsukan jam kerja operasional (hour meter) alat berat",
+                    "Mengabaikan standar keselamatan kerja demi efisiensi waktu"
+                ],
+                answer: 1,
+                pembahasan: "Integritas dan kejujuran bisnis diwujudkan melalui transparansi informasi kelaikan unit demi keselamatan dan kepercayaan pelanggan."
+            },
+            {
+                category: "Karakter Wirausaha",
+                question: "Kemampuan memotivasi tim kerja, mengelola konflik internal, serta mendelegasikan tugas secara efektif merupakan bagian dari keterampilan wirausaha yaitu...",
+                options: [
+                    "Technical skill",
+                    "Conceptual skill",
+                    "Human relation skill",
+                    "Financial control skill",
+                    "Operational skill"
+                ],
+                answer: 2,
+                pembahasan: "Human relation skill (keterampilan hubungan antarmanusia) mencakup kepemimpinan, komunikasi, resolusi konflik, dan motivasi tim."
+            },
+            {
+                category: "Karakter Wirausaha",
+                question: "Perbedaan mendasar antara seorang pekerja (employee) dengan seorang wirausahawan (entrepreneur) dalam memandang peluang adalah...",
+                options: [
+                    "Pekerja fokus pada keamanan, wirausahawan fokus pada penciptaan nilai",
+                    "Pekerja menciptakan lapangan kerja, wirausahawan mencari pekerjaan",
+                    "Pekerja menanggung risiko finansial usaha, wirausahawan menerima gaji tetap",
+                    "Pekerja berorientasi profit eksternal, wirausahawan berorientasi instruksi atasan",
+                    "Pekerja bekerja tanpa batas waktu, wirausahawan bekerja sesuai jam kerja"
+                ],
+                answer: 0,
+                pembahasan: "Wirausahawan selalu proaktif menciptakan nilai tambah (value creation) dan siap mengelola risiko, sedangkan pekerja cenderung mencari kepastian dan stabilitas."
+            },
+
+            // DESIGN THINKING & PROTOTYPE
+            {
+                category: "Design Thinking & Prototype",
+                question: "Tim DKV sedang melakukan wawancara mendalam dengan pengguna aplikasi E-Commerce lokal untuk memahami rasa frustrasi mereka saat checkout. Tahapan Design Thinking ini adalah...",
+                options: [
+                    "Define",
+                    "Empathize",
+                    "Ideate",
+                    "Prototype",
+                    "Test"
+                ],
+                answer: 1,
+                pembahasan: "Tahap Empathize bertujuan memahami pengalaman, perasaan, dan kebutuhan pengguna langsung dari sudut pandang mereka melalui wawancara/observasi."
+            },
+            {
+                category: "Design Thinking & Prototype",
+                question: "Setelah mengumpulkan berbagai keluhan pengguna terkait lambatnya jaringan WiFi sekolah, siswa TKJ merumuskan masalah: 'Siswa membutuhkan koneksi cepat karena sistem pembelajaran berbasis video mutakhir'. Tahap ini disebut...",
+                options: [
+                    "Empathize",
+                    "Define",
+                    "Ideate",
+                    "Prototype",
+                    "Test"
+                ],
+                answer: 1,
+                pembahasan: "Tahap Define membingkai masalah utama menjadi pernyataan masalah yang jelas (problem statement) berfokus pada kebutuhan manusia (human-centered)."
+            },
+            {
+                category: "Design Thinking & Prototype",
+                question: "Siswa TKR mengumpulkan 50 ide solusi berbeda untuk mengatasi masalah overheating pada mesin balap. Tahapan yang sedang dijalankan adalah...",
+                options: [
+                    "Testing",
+                    "Empathizing",
+                    "Ideating",
+                    "Defining",
+                    "Prototyping"
+                ],
+                answer: 2,
+                pembahasan: "Tahap Ideate adalah proses curah pendapat (brainstorming) untuk menghasilkan gagasan solusi kreatif sebanyak mungkin."
+            },
+            {
+                category: "Design Thinking & Prototype",
+                question: "Siswa TSM membuat sketsa awal dan mockup 3D filter udara berbahan serat kelapa sebelum memproduksinya secara massal. Tujuan pembuatan prototype tersebut adalah...",
+                options: [
+                    "Memaksimalkan penjualan di awal pasar",
+                    "Menguji konsep secara fisik dan mendapat umpan balik dini",
+                    "Menghitung biaya pajak perusahaan secara langsung",
+                    "Menghilangkan kebutuhan uji coba lapangan",
+                    "Mengganti dokumen izin usaha resmi"
+                ],
+                answer: 1,
+                pembahasan: "Prototype dibuat untuk memvisualisasikan ide, menguji kelayakan teknis, dan mendapatkan umpan balik awal dengan biaya efisien."
+            },
+            {
+                category: "Design Thinking & Prototype",
+                question: "Tahapan di mana prototipe sakelar otomatis berbasis IoT diuji coba langsung oleh pemilik rumah untuk melihat kemudahan pengoperasiannya adalah tahapan...",
+                options: [
+                    "Test",
+                    "Ideate",
+                    "Define",
+                    "Empathize",
+                    "Scaling"
+                ],
+                answer: 0,
+                pembahasan: "Tahap Test adalah menguji produk/prototype langsung kepada pengguna akhir dalam situasi nyata untuk mengevaluasi efektivitasnya."
+            },
+            {
+                category: "Design Thinking & Prototype",
+                question: "Manakah urutan siklus Design Thinking yang paling tepat dan baku dalam pengembangan produk kewirausahaan?",
+                options: [
+                    "Define -> Empathize -> Ideate -> Test -> Prototype",
+                    "Empathize -> Define -> Ideate -> Prototype -> Test",
+                    "Ideate -> Empathize -> Define -> Prototype -> Test",
+                    "Prototype -> Test -> Empathize -> Define -> Ideate",
+                    "Define -> Ideate -> Empathize -> Prototype -> Test"
+                ],
+                answer: 1,
+                pembahasan: "Siklus baku Design Thinking berurutan: Empathize (Pahami) -> Define (Rumuskan) -> Ideate (Gagaskan) -> Prototype (Buat Contoh) -> Test (Uji Coba)."
+            },
+            {
+                category: "Design Thinking & Prototype",
+                question: "Siswa TPM membuat prototipe alat pemotong plat cepat dari bahan kayu tebal terlebih dahulu untuk menguji fungsi ergonomis pegangannya. Prototipe jenis ini tergolong...",
+                options: [
+                    "High-Fidelity Prototype",
+                    "Low-Fidelity Prototype",
+                    "Final Production Model",
+                    "Mass Production Unit",
+                    "Digital Virtual Simulation"
+                ],
+                answer: 1,
+                pembahasan: "Low-Fidelity Prototype menggunakan bahan sederhana/murah (kayu/kertas) untuk menguji konsep dasar fisik atau fungsi sederhana."
+            },
+            {
+                category: "Design Thinking & Prototype",
+                question: "Dalam konteks MVP (Minimum Viable Product), tujuan utama pembuatan versi produk terbatas ini adalah...",
+                options: [
+                    "Mendapatkan profit maksimal pada iterasi pertama",
+                    "Menguji hipotesis pasar dengan fitur paling esensial dan sumber daya minimal",
+                    "Menghentikan inovasi produk setelah peluncuran awal",
+                    "Membuat produk paling sempurna tanpa cela di pasar",
+                    "Memenuhi syarat administrasi pinjaman bank"
+                ],
+                answer: 1,
+                pembahasan: "MVP dirancang dengan fitur inti guna memvalidasi gagasan ke konsumen nyata secepat mungkin dengan biaya minimum."
+            },
+            {
+                category: "Design Thinking & Prototype",
+                question: "Ketika hasil pengujian (testing) menunjukkan pengguna kesulitan menavigasi menu alat ukur digital TAV, tindakan yang paling sesuai dengan prinsip Design Thinking adalah...",
+                options: [
+                    "Menyalahkan pengguna karena tidak membaca petunjuk",
+                    "Melakukan iterasi (perbaikan) desain berdasarkan masukan pengguna",
+                    "Memaksa produk tetap dipasarkan tanpa perubahan",
+                    "Membatalkan seluruh proyek secara permanen",
+                    "Menaikkan harga produk untuk menutupi kesalahan"
+                ],
+                answer: 1,
+                pembahasan: "Design Thinking bersifat iteratif (berulang). Umpan balik negatif pada tahap test digunakan untuk merevisi ide atau prototipe."
+            },
+            {
+                category: "Design Thinking & Prototype",
+                question: "Prototipe kerja (working prototype) pada produk alat berat (TAB) dibuat dengan tujuan utama untuk...",
+                options: [
+                    "Sekadar pameran estetika tanpa fungsi teknis",
+                    "Menguji keandalan mekanisme, kekuatan material, dan fungsi operasional",
+                    "Menghemat biaya brosur pemasaran cetak",
+                    "Menentukan besaran gaji karyawan pabrik",
+                    "Mempercepat proses likuidasi perusahaan"
+                ],
+                answer: 1,
+                pembahasan: "Working prototype berfungsi menguji kelaikan mekanis, performa fungsi, dan keamanan operasional sistem sebelum diproduksi."
+            },
+
+            // ANALISIS SWOT
+            {
+                category: "Analisis SWOT",
+                question: "Sebuah studio DKV memiliki desainer berbakat dan peralatan canggih (Internal), namun daya beli masyarakat sekitar sedang menurun (Eksternal). Dalam analisis SWOT, kondisi ini mencerminkan kombinasi...",
+                options: [
+                    "Strength & Opportunity",
+                    "Strength & Threat",
+                    "Weakness & Opportunity",
+                    "Weakness & Threat",
+                    "Opportunity & Threat"
+                ],
+                answer: 1,
+                pembahasan: "Desainer berbakat & alat canggih = Kekuatan (Strength/Internal). Penurunan daya beli masyarakat = Ancaman (Threat/Eksternal)."
+            },
+            {
+                category: "Analisis SWOT",
+                question: "Usaha servis komputer TKJ belum memiliki sertifikasi resmi (Faktor A), tetapi ada kebijakan pemerintah yang mewajibkan seluruh sekolah menggunakan jasa teknisi lokal (Faktor B). Faktor A dan B adalah...",
+                options: [
+                    "A = Weakness, B = Opportunity",
+                    "A = Strength, B = Threat",
+                    "A = Threat, B = Weakness",
+                    "A = Opportunity, B = Strength",
+                    "A = Strength, B = Opportunity"
+                ],
+                answer: 0,
+                pembahasan: "Belum memiliki sertifikasi = Kelemahan internal (Weakness). Kebijakan pemerintah yang menguntungkan = Peluang eksternal (Opportunity)."
+            },
+            {
+                category: "Analisis SWOT",
+                question: "Strategi SO (Strength - Opportunity) dalam matriks SWOT bertujuan untuk...",
+                options: [
+                    "Meminimalkan kelemahan untuk menghindari ancaman",
+                    "Menggunakan kekuatan internal untuk memanfaatkan peluang eksternal",
+                    "Memanfaatkan peluang untuk mengatasi kelemahan internal",
+                    "Menggunakan kekuatan untuk mengatasi ancaman pasar",
+                    "Menghindari ancaman dengan cara menutup lini usaha"
+                ],
+                answer: 1,
+                pembahasan: "Strategi SO memanfaatkan secara maksimal seluruh kekuatan (Strength) perusahaan untuk menangkap peluang (Opportunity) yang terbuka."
+            },
+            {
+                category: "Analisis SWOT",
+                question: "Bengkel TKR menemukan bahwa banyak pesaing baru bermunculan dengan tarif lebih murah. Hasil evaluasi internal menunjukkan kecepatan servis bengkel sendiri sangat unggul. Strategi ST yang tepat adalah...",
+                options: [
+                    "Menurunkan kualitas oli demi menekan tarif servis",
+                    "Mempromosikan keunggulan kecepatan dan presisi servis untuk mengatasi ancaman persaingan",
+                    "Menutup bengkel dan pindah lokasi ke luar kota",
+                    "Mengurangi jam operasional bengkel",
+                    "Melaporkan pesaing ke pihak berwajib"
+                ],
+                answer: 1,
+                pembahasan: "Strategi ST (Strength-Threat) mengoptimalkan keunggulan internal (kecepatan servis) untuk meredam ancaman eksternal (persaingan harga)."
+            },
+            {
+                category: "Analisis SWOT",
+                question: "Sebuah toko aksesoris sepeda motor TSM memiliki keterbatasan modal (Weakness), namun tren modifikasi sepeda motor di daerahnya sedang meningkat pesat (Opportunity). Strategi WO yang disarankan adalah...",
+                options: [
+                    "Menjual toko kepada investor lain",
+                    "Mengajukan kemitraan/consignment dengan pemasok untuk memenuhi tren tanpa modal besar",
+                    "Abaikan tren dan fokus pada stok lama",
+                    "Menaikkan harga barang dua kali lipat",
+                    "Meminjam uang ke rentenir tanpa perhitungan"
+                ],
+                answer: 1,
+                pembahasan: "Strategi WO (Weakness-Opportunity) merancang langkah untuk mengatasi kelemahan modal dengan memanfaatkan sistem konsinyasi guna menangkap peluang tren."
+            },
+            {
+                category: "Analisis SWOT",
+                question: "Manakah di antara variabel berikut yang tergolong sebagai faktor INTERNAL dalam analisis SWOT?",
+                options: [
+                    "Kebijakan pajak usaha mikro dari pemerintah",
+                    "Perkembangan teknologi kecerdasan buatan",
+                    "Keterampilan dan kompetensi teknis tim kerja",
+                    "Tingkat inflasi nasional",
+                    "Bencana alam di area operasional"
+                ],
+                answer: 2,
+                pembahasan: "Keterampilan dan kompetensi tim kerja berada di dalam kendali organisasi/usaha, sehingga tergolong faktor internal (Strength/Weakness)."
+            },
+            {
+                category: "Analisis SWOT",
+                question: "Usaha instalasi listrik TITL menghadapi faktor persaingan ketat (Threat) serta keterbatasan jumlah teknisi bersertifikat (Weakness). Strategi WT yang paling tepat adalah...",
+                options: [
+                    "Fokus pada efisiensi operasional dan pelatihan sertifikasi teknisi agar tidak kalah bersaing",
+                    "Ekspansi cabang ke seluruh pelosok provinsi",
+                    "Merekrut pekerja tanpa pengalaman untuk proyek besar",
+                    "Mengabaikan standar K3 agar pekerjaan cepat selesai",
+                    "Membeli peralatan mahal secara kredit berlebihan"
+                ],
+                answer: 0,
+                pembahasan: "Strategi WT (Weakness-Threat) bersifat bertahan (defensif) dengan meminimalkan kelemahan internal dan menghindari ancaman eksternal."
+            },
+            {
+                category: "Analisis SWOT",
+                question: "Seorang wirausahawan TAV mengidentifikasi bahwa lokasi usahanya sangat strategis di dekat kawasan industri. Dalam matriks SWOT, hal ini dikategorikan sebagai...",
+                options: [
+                    "Strength (Kekuatan)",
+                    "Weakness (Kelemahan)",
+                    "Opportunity (Peluang)",
+                    "Threat (Ancaman)",
+                    "Target Market"
+                ],
+                answer: 0,
+                pembahasan: "Aset/keunggulan fisik yang dimiliki dan dikuasai oleh perusahaan (seperti lokasi strategis yang disewa/dimiliki) tergolong Strength."
+            },
+            {
+                category: "Analisis SWOT",
+                question: "Langkah pertama yang harus dilakukan saat menyusun analisis SWOT untuk usaha bengkel bubut TPM adalah...",
+                options: [
+                    "Langsung menentukan harga jual produk",
+                    "Mengumpulkan data dan informasi kondisi internal serta eksternal usaha",
+                    "Meminjam dana bank sebesar-besarnya",
+                    "Mencetak brosur promosi besar-besaran",
+                    "Mengubah nama brand perusahaan"
+                ],
+                answer: 1,
+                pembahasan: "Analisis SWOT selalu diawali dengan pengumpulan data faktual mengenai lingkungan internal (sumber daya) dan eksternal (tren/pasar)."
+            },
+            {
+                category: "Analisis SWOT",
+                question: "Perubahan regulasi emisi gas buang dari pemerintah yang menguntungkan produsen penyaring limbah alat berat (TAB) dikategorikan sebagai...",
+                options: [
+                    "Strength",
+                    "Weakness",
+                    "Opportunity",
+                    "Threat",
+                    "Internal Resource"
+                ],
+                answer: 2,
+                pembahasan: "Perubahan regulasi eksternal yang mendukung pemasaran produk baru tergolong sebagai Peluang (Opportunity)."
+            },
+
+            // PENYUSUNAN LAPORAN USAHA
+            {
+                category: "Penyusunan Laporan Usaha",
+                question: "Sebuah laporan kegiatan usaha yang disusun oleh wirausahawan DKV setelah menyelesaikan proyek desain logo harus memenuhi prinsip sistematis, artinya...",
+                options: [
+                    "Disusun berdasarkan opini pribadi pemilik usaha",
+                    "Disusun secara berurutan, logis, dan saling berkaitan antarbagian",
+                    "Menggunakan istilah yang sangat rumit agar terlihat keren",
+                    "Hanya berisi ringkasan keuntungan finansial saja",
+                    "Dibuat sepanjang mungkin tanpa mempedulikan data"
+                ],
+                answer: 1,
+                pembahasan: "Prinsip sistematis berarti laporan disajikan dalam struktur yang teratur, logis, dan runtut sehingga mudah dipahami pembaca."
+            },
+            {
+                category: "Penyusunan Laporan Usaha",
+                question: "Komponen dalam sistematika laporan usaha yang berisi latar belakang, visi, misi, dan profil singkat perusahaan berada pada bagian...",
+                options: [
+                    "Bab Pendahuluan",
+                    "Bab Pelaksanaan/Pembahasan Usaha",
+                    "Bab Pengelolaan Keuangan",
+                    "Bab Penutup & Kesimpulan",
+                    "Lampiran Dokumen"
+                ],
+                answer: 0,
+                pembahasan: "Bab Pendahuluan memuat latar belakang pendirian usaha, gambaran umum, visi, misi, dan tujuan kegiatan usaha."
+            },
+            {
+                category: "Penyusunan Laporan Usaha",
+                question: "Siswa TKJ menyusun laporan operasional bulanan usaha RT/RW Net. Bagian yang melaporkan jumlah pelanggan aktif, kendala teknis jaringan, dan penanganannya disebut...",
+                options: [
+                    "Laporan Aspek Legalitas",
+                    "Laporan Aspek Pelaksanaan Operasional",
+                    "Laporan Aspek Pemasaran Khusus",
+                    "Laporan Struktur Organisasi",
+                    "Laporan Neraca Saldo"
+                ],
+                answer: 1,
+                pembahasan: "Aspek operasional menyajikan aktivitas harian teknis produksi/jasa, kendala lapangan, serta langkah mitigasi teknis yang dilakukan."
+            },
+            {
+                category: "Penyusunan Laporan Usaha",
+                question: "Fungsi utama laporan kegiatan usaha bagi investor atau pihak perbankan saat pengajuan pinjaman modal adalah...",
+                options: [
+                    "Sebagai bahan pameran kekayaan pemilik usaha",
+                    "Menilai kelaikan, transparansi, dan prospek keberlanjutan usaha",
+                    "Mengurangi kewajiban membayar pajak usaha",
+                    "Memenuhi formalitas tanpa perlu dianalisis",
+                    "Mengganti dokumen sertifikat tanah"
+                ],
+                answer: 1,
+                pembahasan: "Investor/Bank mengevaluasi laporan usaha untuk menilai tingkat risiko, kredibilitas manajerial, dan kemampuan mengembalikan investasi/pinjaman."
+            },
+            {
+                category: "Penyusunan Laporan Usaha",
+                question: "Manakah dokumen berikut yang WAJIB dilampirkan pada bagian lampiran (appendix) laporan usaha bengkel TKR?",
+                options: [
+                    "Foto kegiatan usaha, nota/kuitansi transaksi, dan surat izin usaha",
+                    "Daftar riwayat hidup seluruh tetangga bengkel",
+                    "Buku resep masakan karyawan",
+                    "Kumpulan artikel berita umum",
+                    "Surat pribadi pemilik usaha"
+                ],
+                answer: 0,
+                pembahasan: "Lampiran berisi bukti autentik pendukung seperti foto fisik kegiatan, nota/kuitansi sah, bukti legalitas (NIB/SIUP), dan denah lokasi."
+            },
+            {
+                category: "Penyusunan Laporan Usaha",
+                question: "Dalam laporan usaha TSM, jika terjadi penurunan penjualan sparepart sebesar 20%, tindakan paling bertanggung jawab yang harus tertulis pada bagian analisis manajemen adalah...",
+                options: [
+                    "Menyembunyikan angka penurunan agar laporan terlihat bagus",
+                    "Menjelaskan penyebab penurunan serta rencana aksi perbaikan penjualan",
+                    "Menyalahkan pelanggan yang tidak mau membeli",
+                    "Menghapus data bulan tersebut dari laporan",
+                    "Mengubah laporan menjadi laporan fiktif"
+                ],
+                answer: 1,
+                pembahasan: "Laporan usaha harus objektif (jujur) serta memuat evaluasi kritis dan rencana solutif terhadap penurunan performa bisnis."
+            },
+            {
+                category: "Penyusunan Laporan Usaha",
+                question: "Bagian akhir dari laporan usaha yang berisi rangkuman kinerja serta saran peningkatan usaha ke depan adalah...",
+                options: [
+                    "Pendahuluan",
+                    "Pembahasan",
+                    "Penutup",
+                    "Executive Summary",
+                    "Daftar Pustaka"
+                ],
+                answer: 2,
+                pembahasan: "Bab Penutup berisi kesimpulan menyeluruh mengenai hasil pelaksanaan kegiatan usaha serta rekomendasi tindak lanjut."
+            },
+            {
+                category: "Penyusunan Laporan Usaha",
+                question: "Sebuah laporan evaluasi usaha TITL menyajikan data perbandingan target omset dengan realisasi pencapaian bulanan. Analisis ini tergolong ke dalam...",
+                options: [
+                    "Analisis Kualitatif Kebiasaan Konsumen",
+                    "Analisis Kuantitatif Kinerja Penjualan",
+                    "Analisis Perilaku Organisasi",
+                    "Analisis Desain Produk",
+                    "Analisis Legalitas Hukum"
+                ],
+                answer: 1,
+                pembahasan: "Membandingkan angka target dan realisasi penjualan berbasis data numerik tergolong analisis kuantitatif kinerja."
+            },
+            {
+                category: "Penyusunan Laporan Usaha",
+                question: "Manakah syarat utama laporan kegiatan usaha yang baik dari segi penyajian data?",
+                options: [
+                    "Subjektif dan emosional",
+                    "Obyektif, akurat, dan relevan",
+                    "Sangat tebal dan penuh hiasan",
+                    "Rumit dan sulit dipahami",
+                    "Rahasia dan tidak boleh diverifikasi"
+                ],
+                answer: 1,
+                pembahasan: "Laporan usaha wajib objektif (sesuai kenyataan), akurat (data tepat), dan relevan dengan tujuan evaluasi bisnis."
+            },
+            {
+                category: "Penyusunan Laporan Usaha",
+                question: "Tujuan ditempatkannya 'Executive Summary' (Ringkasan Eksekutif) pada bagian paling depan laporan usaha adalah...",
+                options: [
+                    "Menggantikan seluruh isi bab laporan",
+                    "Memberikan gambaran singkat dan padat mengenai inti isi laporan kepada pimpinan/investor",
+                    "Memenuhi kuota jumlah halaman laporan",
+                    "Menyembunyikan rincian biaya usaha",
+                    "Menghindari pertanyaan kritis dari pihak eksternal"
+                ],
+                answer: 1,
+                pembahasan: "Ringkasan Eksekutif dirancang untuk memberikan poin-poin krusial bisnis secara cepat dan padat kepada pengambil keputusan yang sibuk."
+            },
+
+            // PENGELOLAAN LAPORAN KEUANGAN USAHA
+            {
+                category: "Pengelolaan Laporan Keuangan",
+                question: "Usaha percetakan DKV membeli mesin cetak digital seharga Rp 50.000.000 secara tunai. Pencatatan transaksi ini pada persamaan dasar akuntansi yang benar adalah...",
+                options: [
+                    "Kas berkurang Rp 50.000.000, Peralatan bertambah Rp 50.000.000",
+                    "Kas bertambah Rp 50.000.000, Utang bertambah Rp 50.000.000",
+                    "Peralatan berkurang Rp 50.000.000, Modal bertambah Rp 50.000.000",
+                    "Kas berkurang Rp 50.000.000, Utang bertambah Rp 50.000.000",
+                    "Modal berkurang Rp 50.000.000, Beban bertambah Rp 50.000.000"
+                ],
+                answer: 0,
+                pembahasan: "Pembelian aset tetap secara tunai mengakibatkan pengalihan bentuk aktiva: Kas (Aktiva) berkurang dan Peralatan (Aktiva) bertambah dalam jumlah sama."
+            },
+            {
+                category: "Pengelolaan Laporan Keuangan",
+                question: "Suatu bengkel TKR memiliki data Keuangan: Pendapatan Servis Rp 15.000.000, Beban Gaji Rp 4.000.000, Beban Sewa Tempat Rp 2.000.000, Beban Listrik/Oli Rp 1.500.000. Laba Bersih bengkel tersebut adalah...",
+                options: [
+                    "Rp 15.000.000",
+                    "Rp 9.000.000",
+                    "Rp 7.500.000",
+                    "Rp 6.500.000",
+                    "Rp 8.000.000"
+                ],
+                answer: 2,
+                pembahasan: "Laba Bersih = Total Pendapatan - Total Beban = Rp 15.000.000 - (Rp 4.000.000 + Rp 2.000.000 + Rp 1.500.000) = Rp 15.000.000 - Rp 7.500.000 = Rp 7.500.000."
+            },
+            {
+                category: "Pengelolaan Laporan Keuangan",
+                question: "Laporan Keuangan yang menyajikan posisi Aktiva (Aset), Kewajiban (Utang), dan Ekuitas (Modal) pada tanggal tertentu disebut...",
+                options: [
+                    "Laporan Laba Rugi",
+                    "Laporan Arus Kas",
+                    "Neraca (Balance Sheet)",
+                    "Laporan Perubahan Modal",
+                    "Catatan atas Laporan Keuangan"
+                ],
+                answer: 2,
+                pembahasan: "Neraca menyajikan posisi keseimbangan keuangan (Aset = Kewajiban + Modal) pada posisi waktu tertentu (snapshot)."
+            },
+            {
+                category: "Pengelolaan Laporan Keuangan",
+                question: "Usaha Perakitan IoT TITL menghitung Biaya Tetap (FC) Rp 10.000.000/bulan. Harga Jual unit (P) Rp 500.000, Biaya Variabel/unit (VC) Rp 300.000. BEP dalam unit produk adalah...",
+                options: [
+                    "20 unit",
+                    "30 unit",
+                    "50 unit",
+                    "100 unit",
+                    "200 unit"
+                ],
+                answer: 2,
+                pembahasan: "BEP (Unit) = FC / (P - VC) = Rp 10.000.000 / (Rp 500.000 - Rp 300.000) = Rp 10.000.000 / Rp 200.000 = 50 unit."
+            },
+            {
+                category: "Pengelolaan Laporan Keuangan",
+                question: "Bila usaha bengkel bubut TPM memiliki BEP sebesar 40 unit per bulan, dan bulan ini mampu menjual 60 unit, artinya perusahaan mengalami...",
+                options: [
+                    "Kerugian operasional sebesar 20 unit",
+                    "Keadaan impas (tidak untung tidak rugi)",
+                    "Keuntungan (Laba) atas penjualan 20 unit di atas BEP",
+                    "Kebangkrutan usaha",
+                    "Kenaikan biaya tetap sebesar 50%"
+                ],
+                answer: 2,
+                pembahasan: "Penjualan melebihi titik impas (BEP) berarti perusahaan sudah menutupi seluruh biaya tetap & variabel, sehingga selisih 20 unit menghasilkan keuntungan."
+            },
+            {
+                category: "Pengelolaan Laporan Keuangan",
+                question: "Komponen dalam Laporan Arus Kas (Cash Flow) yang mencatat transaksi penerimaan dari penjualan dan pengeluaran beban operasional rutin termasuk aktivitas...",
+                options: [
+                    "Aktivitas Operasional",
+                    "Aktivitas Investasi",
+                    "Aktivitas Pendanaan",
+                    "Aktivitas Non-Kas",
+                    "Aktivitas Modal Tetap"
+                ],
+                answer: 0,
+                pembahasan: "Arus kas dari aktivitas operasional mencakup transaksi penerimaan dan pengeluaran kas utama yang berkaitan langsung dengan kegiatan bisnis rutin."
+            },
+            {
+                category: "Pengelolaan Laporan Keuangan",
+                question: "Siswa TAB mencatat penyusutan (depresiasi) tahunan mesin ekskavator sebesar Rp 12.000.000. Pencatatan biaya penyusutan ini bertujuan untuk...",
+                options: [
+                    "Menambah sisa uang kas tunai di brankas",
+                    "Mengalokasikan harga perolehan aset tetap selama masa manfaatnya secara proporsional",
+                    "Menghindari kewajiban bayar tagihan listrik",
+                    "Memalsukan nilai aset di mata hukum",
+                    "Menaikkan nilai jual modal usaha"
+                ],
+                answer: 1,
+                pembahasan: "Penyusutan merupakan alokasi sistematis nilai aset tetap yang berkurang nilainya selama masa pemakaian/manfaat ekonomi."
+            },
+            {
+                category: "Pengelolaan Laporan Keuangan",
+                question: "Jika nilai Total Aktiva usaha TAV adalah Rp 100.000.000 dan Total Utang (Kewajiban) adalah Rp 35.000.000, maka besarnya Ekuitas (Modal Sendiri) adalah...",
+                options: [
+                    "Rp 135.000.000",
+                    "Rp 65.000.000",
+                    "Rp 35.000.000",
+                    "Rp 100.000.000",
+                    "Rp 70.000.000"
+                ],
+                answer: 1,
+                pembahasan: "Persamaan Akuntansi: Aktiva = Utang + Modal. Maka Modal = Aktiva - Utang = Rp 100.000.000 - Rp 35.000.000 = Rp 65.000.000."
+            },
+            {
+                category: "Pengelolaan Laporan Keuangan",
+                question: "Pengambilan uang tunai perusahaan oleh pemilik usaha untuk kepentingan pribadi (Prive) akan mengakibatkan...",
+                options: [
+                    "Kas bertambah dan Modal bertambah",
+                    "Kas berkurang dan Modal berkurang",
+                    "Kas berkurang dan Utang bertambah",
+                    "Kas bertambah dan Utang berkurang",
+                    "Tidak mempengaruhi posisi keuangan sama sekali"
+                ],
+                answer: 1,
+                pembahasan: "Transaksi Prive mengurangi aset kas tunai usaha dan secara langsung mengurangi saldo ekuitas/modal pemilik."
+            },
+            {
+                category: "Pengelolaan Laporan Keuangan",
+                question: "Tujuan utama menyusun Laporan Perubahan Modal (Equity Statement) adalah...",
+                options: [
+                    "Mengetahui daftar utang jangka panjang",
+                    "Mengetahui riwayat perubahan saldo modal awal menjadi modal akhir dalam satu periode",
+                    "Menghitung jumlah unit barang di gudang",
+                    "Mengukur tingkat kepuasan pelanggan",
+                    "Menentukan besaran komisi penjualan sales"
+                ],
+                answer: 1,
+                pembahasan: "Laporan Perubahan Modal menggambarkan dinamika modal usaha dari awal periode, ditambah laba (atau dikurangi rugi) dan prive, hingga menjadi modal akhir."
+            }
+        ];
+
+        /* ==========================================================================
+           2. APPLICATION STATE MANAGEMENT
+           ========================================================================== */
+        let state = {
+            studentName: '',
+            studentClass: '',
+            questions: [], // Shuffled session questions
+            userAnswers: [], // Array of indices (0-4) or null
+            doubtMarks: [], // Array of booleans
+            currentIndex: 0,
+            timerSeconds: 3600, // 60 minutes
+            timerInterval: null,
+            examSubmitted: false,
+            cheatCount: 0
+        };
+
+        // Initialize Dynamic Class Dropdown & Page Logic
+        window.addEventListener('DOMContentLoaded', () => {
+            initClassDropdown();
+            setupAntiCheat();
+        });
+
+        function initClassDropdown() {
+            const selectEl = document.getElementById('student-class');
+            const classGroups = [
+                { name: "DKV", count: 4 },
+                { name: "TKJ", count: 13 },
+                { name: "TKR", count: 11 },
+                { name: "TSM", count: 13 },
+                { name: "TITL", count: 4 },
+                { name: "TAV", count: 1 },
+                { name: "TPM", count: 3 },
+                { name: "TAB", count: 9 }
+            ];
+
+            classGroups.forEach(grp => {
+                const optGroup = document.createElement('optgroup');
+                optGroup.label = `JURUSAN ${grp.name}`;
+                for (let i = 1; i <= grp.count; i++) {
+                    const opt = document.createElement('option');
+                    opt.value = `${grp.name} ${i}`;
+                    opt.textContent = `${grp.name} ${i}`;
+                    optGroup.appendChild(opt);
+                }
+                selectEl.appendChild(optGroup);
+            });
+        }
+
+        function handleStartExam(e) {
+            e.preventDefault();
+            const nameInput = document.getElementById('student-name').value.trim();
+            const classInput = document.getElementById('student-class').value;
+
+            if (!nameInput || !classInput) {
+                alert("Mohon isi Nama Lengkap dan Pilih Kelas terlebih dahulu!");
+                return;
+            }
+
+            state.studentName = nameInput;
+            state.studentClass = classInput;
+
+            // Generate Randomized Question Set for this student session
+            state.questions = generateRandomizedQuestions(rawQuestionBank);
+            state.userAnswers = new Array(state.questions.length).fill(null);
+            state.doubtMarks = new Array(state.questions.length).fill(false);
+            state.currentIndex = 0;
+            state.timerSeconds = 3600; // 60 mins
+
+            // Update UI Header
+            document.getElementById('header-student-name').textContent = state.studentName;
+            document.getElementById('header-student-class').textContent = state.studentClass;
+            document.getElementById('header-exam-status').classList.remove('hidden');
+
+            // Switch Screen
+            document.getElementById('screen-register').classList.add('hidden');
+            document.getElementById('screen-exam').classList.remove('hidden');
+
+            // Start Timer & Render First Question
+            startTimer();
+            renderQuestionGrid();
+            renderCurrentQuestion();
+        }
+
+        // Fisher-Yates Shuffle with Option Randomization
+        function generateRandomizedQuestions(baseBank) {
+            // Clone base array
+            let cloned = JSON.parse(JSON.stringify(baseBank));
+            
+            // Shuffle question order
+            for (let i = cloned.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [cloned[i], cloned[j]] = [cloned[j], cloned[i]];
+            }
+
+            // Shuffle answer choices per question while keeping track of correct choice index
+            cloned.forEach(q => {
+                const originalOptions = q.options.map((optText, idx) => ({
+                    text: optText,
+                    isCorrect: idx === q.answer
+                }));
+
+                // Shuffle options
+                for (let i = originalOptions.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [originalOptions[i], originalOptions[j]] = [originalOptions[j], originalOptions[i]];
+                }
+
+                q.options = originalOptions.map(o => o.text);
+                q.answer = originalOptions.findIndex(o => o.isCorrect);
+            });
+
+            return cloned;
+        }
+
+        function startTimer() {
+            if (state.timerInterval) clearInterval(state.timerInterval);
+
+            state.timerInterval = setInterval(() => {
+                if (state.timerSeconds > 0) {
+                    state.timerSeconds--;
+                    updateTimerDisplay();
+                } else {
+                    clearInterval(state.timerInterval);
+                    alert("WAKTU HABIS! Ujian akan disubmit secara otomatis.");
+                    processFinalSubmit();
+                }
+            }, 1000);
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(state.timerSeconds / 60);
+            const secs = state.timerSeconds % 60;
+            const displayStr = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            document.getElementById('timer-display').textContent = displayStr;
+        }
+
+        function renderCurrentQuestion() {
+            const q = state.questions[state.currentIndex];
+            const qNum = state.currentIndex + 1;
+
+            document.getElementById('current-question-badge').textContent = `Soal #${qNum} dari ${state.questions.length}`;
+            document.getElementById('current-question-category').textContent = q.category;
+            document.getElementById('question-text').textContent = q.question;
+
+            // Doubt mark checkbox state
+            document.getElementById('btn-doubt').checked = state.doubtMarks[state.currentIndex];
+
+            // Render Choice Buttons
+            const choicesContainer = document.getElementById('choices-container');
+            choicesContainer.innerHTML = '';
+
+            const optionPrefixes = ['A', 'B', 'C', 'D', 'E'];
+
+            q.options.forEach((optText, optIdx) => {
+                const isSelected = state.userAnswers[state.currentIndex] === optIdx;
+                
+                const optionBtn = document.createElement('div');
+                optionBtn.onclick = () => selectAnswer(optIdx);
+                optionBtn.className = `p-4 rounded-xl border-2 cursor-pointer transition flex items-center space-x-3.5 select-none ${
+                    isSelected 
+                        ? 'border-blue-600 bg-blue-50/80 text-blue-900 shadow-sm' 
+                        : 'border-slate-200 bg-white hover:border-slate-300 text-slate-700 hover:bg-slate-50'
+                }`;
+
+                optionBtn.innerHTML = `
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm shrink-0 transition ${
+                        isSelected ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600'
+                    }">
+                        ${optionPrefixes[optIdx]}
+                    </div>
+                    <div class="text-sm sm:text-base font-medium leading-snug flex-grow">
+                        ${escapeHtml(optText)}
+                    </div>
+                `;
+                choicesContainer.appendChild(optionBtn);
+            });
+
+            // Update Navigation Button States
+            document.getElementById('btn-prev').disabled = state.currentIndex === 0;
+            document.getElementById('btn-prev').classList.toggle('opacity-50', state.currentIndex === 0);
+
+            if (state.currentIndex === state.questions.length - 1) {
+                document.getElementById('btn-next').classList.add('hidden');
+                document.getElementById('btn-finish').classList.remove('hidden');
+            } else {
+                document.getElementById('btn-next').classList.remove('hidden');
+                document.getElementById('btn-finish').classList.add('hidden');
+            }
+
+            renderQuestionGrid();
+        }
+
+        function selectAnswer(optIdx) {
+            state.userAnswers[state.currentIndex] = optIdx;
+            renderCurrentQuestion();
+            updateAnsweredBadge();
+        }
+
+        function toggleDoubtMark() {
+            state.doubtMarks[state.currentIndex] = document.getElementById('btn-doubt').checked;
+            renderQuestionGrid();
+        }
+
+        function navigateQuestion(direction) {
+            const newIndex = state.currentIndex + direction;
+            if (newIndex >= 0 && newIndex < state.questions.length) {
+                state.currentIndex = newIndex;
+                renderCurrentQuestion();
+            }
+        }
+
+        function jumpToQuestion(index) {
+            state.currentIndex = index;
+            renderCurrentQuestion();
+        }
+
+        function renderQuestionGrid() {
+            const gridContainer = document.getElementById('question-grid');
+            gridContainer.innerHTML = '';
+
+            state.questions.forEach((_, idx) => {
+                const btn = document.createElement('button');
+                btn.onclick = () => jumpToQuestion(idx);
+                
+                const isCurrent = state.currentIndex === idx;
+                const isAnswered = state.userAnswers[idx] !== null;
+                const isDoubt = state.doubtMarks[idx];
+
+                let bgClass = "bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200";
+                if (isCurrent) {
+                    bgClass = "bg-blue-600 text-white font-bold ring-2 ring-blue-600 ring-offset-1";
+                } else if (isDoubt) {
+                    bgClass = "bg-amber-400 text-amber-950 font-bold border-amber-500";
+                } else if (isAnswered) {
+                    bgClass = "bg-emerald-500 text-white font-bold border-emerald-600";
+                }
+
+                btn.className = `w-full h-10 rounded-lg border text-xs font-semibold flex items-center justify-center transition ${bgClass}`;
+                btn.textContent = idx + 1;
+                gridContainer.appendChild(btn);
+            });
+
+            updateAnsweredBadge();
+        }
+
+        function updateAnsweredBadge() {
+            const answeredCount = state.userAnswers.filter(a => a !== null).length;
+            document.getElementById('answered-count-badge').textContent = `${answeredCount}/50 Terjawab`;
+        }
+
+        function setupAntiCheat() {
+            // Detect when user switches tabs or minimizes browser
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden && !state.examSubmitted && state.questions.length > 0) {
+                    triggerCheatPenalty();
+                }
+            });
+
+            window.addEventListener('blur', () => {
+                if (!state.examSubmitted && state.questions.length > 0) {
+                    triggerCheatPenalty();
+                }
+            });
+        }
+
+        function triggerCheatPenalty() {
+            // Reset position to Question 1 and clear answers
+            state.currentIndex = 0;
+            state.userAnswers = new Array(state.questions.length).fill(null);
+            state.doubtMarks = new Array(state.questions.length).fill(false);
+            
+            // Show warning modal
+            document.getElementById('modal-cheat').classList.remove('hidden');
+
+            // Refresh view
+            renderCurrentQuestion();
+        }
+
+        function closeCheatModal() {
+            document.getElementById('modal-cheat').classList.add('hidden');
+        }
+
+        function confirmSubmitExam() {
+            const answeredCount = state.userAnswers.filter(a => a !== null).length;
+            const unanswered = state.questions.length - answeredCount;
+            
+            const modalText = unanswered > 0 
+                ? `Masih ada ${unanswered} soal yang BELUM dijawab. Yakin ingin menyelesaikan ujian sekarang?`
+                : `Anda telah menjawab seluruh 50 soal. Yakin ingin menyelesaikan ujian?`;
+
+            document.getElementById('submit-modal-text').textContent = modalText;
+            document.getElementById('modal-submit').classList.remove('hidden');
+        }
+
+        function closeSubmitModal() {
+            document.getElementById('modal-submit').classList.add('hidden');
+        }
+
+        function processFinalSubmit() {
+            state.examSubmitted = true;
+            if (state.timerInterval) clearInterval(state.timerInterval);
+
+            closeSubmitModal();
+
+            // Calculate Score (Each correct question = 2 points, max 100)
+            let correctCount = 0;
+            state.questions.forEach((q, idx) => {
+                if (state.userAnswers[idx] === q.answer) {
+                    correctCount++;
+                }
+            });
+
+            const wrongCount = state.questions.length - correctCount;
+            const finalScore = correctCount * 2; // 50 * 2 = 100
+
+            // Determine Grade Status
+            let gradeLabel = "";
+            let gradeColorClass = "";
+            if (finalScore >= 85) {
+                gradeLabel = "Sangat Baik (A) - Lulus Memuaskan";
+                gradeColorClass = "bg-emerald-500/20 text-emerald-300 border border-emerald-400/40";
+            } else if (finalScore >= 75) {
+                gradeLabel = "Baik (B) - Lulus Standar TKA";
+                gradeColorClass = "bg-blue-500/20 text-blue-300 border border-blue-400/40";
+            } else if (finalScore >= 60) {
+                gradeLabel = "Cukup (C) - Perlu Pendalaman";
+                gradeColorClass = "bg-amber-500/20 text-amber-300 border border-amber-400/40";
+            } else {
+                gradeLabel = "Kurang (D) - Wajib Remedial";
+                gradeColorClass = "bg-red-500/20 text-red-300 border border-red-400/40";
+            }
+
+            // Populate Result Screen
+            document.getElementById('result-score-display').textContent = finalScore;
+            document.getElementById('res-student-name').textContent = state.studentName;
+            document.getElementById('res-student-class').textContent = state.studentClass;
+            document.getElementById('res-correct-count').textContent = `${correctCount} Soal`;
+            document.getElementById('res-wrong-count').textContent = `${wrongCount} Soal`;
+
+            const gradeBadgeEl = document.getElementById('result-grade-badge');
+            gradeBadgeEl.textContent = `Kategori: ${gradeLabel}`;
+            gradeBadgeEl.className = `inline-block px-4 py-1.5 rounded-lg text-xs sm:text-sm font-bold ${gradeColorClass}`;
+
+            // Render Pembahasan Section
+            renderPembahasan();
+
+            // Switch Screen
+            document.getElementById('screen-exam').classList.add('hidden');
+            document.getElementById('screen-result').classList.remove('hidden');
+            document.getElementById('header-exam-status').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderPembahasan() {
+            const container = document.getElementById('pembahasan-container');
+            container.innerHTML = '';
+
+            const prefixes = ['A', 'B', 'C', 'D', 'E'];
+
+            state.questions.forEach((q, idx) => {
+                const qNum = idx + 1;
+                const userChoiceIdx = state.userAnswers[idx];
+                const isCorrect = userChoiceIdx === q.answer;
+
+                const card = document.createElement('div');
+                card.className = `bg-white rounded-2xl p-6 shadow-md border ${
+                    isCorrect ? 'border-emerald-200' : 'border-red-200'
+                }`;
+
+                const userChoiceText = userChoiceIdx !== null 
+                    ? `${prefixes[userChoiceIdx]}. ${q.options[userChoiceIdx]}` 
+                    : '<span class="text-slate-400 font-italic">Tidak Dijawab</span>';
+
+                const keyChoiceText = `${prefixes[q.answer]}. ${q.options[q.answer]}`;
+
+                card.innerHTML = `
+                    <div class="flex items-start justify-between gap-4 mb-3 border-b pb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="px-3 py-1 font-bold text-xs rounded-full ${
+                                isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
+                            }">
+                                ${isCorrect ? '<i class="fa-solid fa-circle-check"></i> BENAR (+2)' : '<i class="fa-solid fa-circle-xmark"></i> SALAH (+0)'}
+                            </span>
+                            <span class="text-xs font-semibold text-slate-500 uppercase">${q.category}</span>
+                        </div>
+                        <span class="font-extrabold text-slate-400 text-sm">#Soal ${qNum}</span>
+                    </div>
+
+                    <p class="font-semibold text-slate-800 text-sm sm:text-base leading-relaxed mb-4">
+                        ${qNum}. ${escapeHtml(q.question)}
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4 text-xs sm:text-sm">
+                        <div class="p-3 rounded-xl ${isCorrect ? 'bg-emerald-50 border border-emerald-200' : 'bg-red-50 border border-red-200'}">
+                            <span class="block text-[10px] font-bold uppercase tracking-wider ${isCorrect ? 'text-emerald-700' : 'text-red-700'} mb-1">
+                                Jawaban Anda:
+                            </span>
+                            <span class="font-semibold ${isCorrect ? 'text-emerald-900' : 'text-red-900'}">
+                                ${userChoiceText}
+                            </span>
+                        </div>
+
+                        <div class="p-3 rounded-xl bg-blue-50 border border-blue-200">
+                            <span class="block text-[10px] font-bold uppercase tracking-wider text-blue-700 mb-1">
+                                Kunci Jawaban Benar:
+                            </span>
+                            <span class="font-semibold text-blue-900">
+                                ${keyChoiceText}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 text-xs sm:text-sm">
+                        <span class="font-bold text-slate-700 block mb-1 flex items-center gap-1.5">
+                            <i class="fa-solid fa-lightbulb text-yellow-500"></i> PEMBAHASAN MATERI:
+                        </span>
+                        <p class="text-slate-600 leading-relaxed">
+                            ${escapeHtml(q.pembahasan)}
+                        </p>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        // Helper Utility to prevent HTML Injection
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+        
+    </script> 
+<script src="email-sender.js"></script>
+</body>
+</html>
